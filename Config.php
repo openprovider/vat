@@ -1,12 +1,27 @@
 <?php
 
-namespace Openprovider\Vat\Config;
+namespace Openprovider\Vat;
 
 class Config
 {
-    static private $data = array(
+    static private $jurisdiction = array(
+        'EU' => array(
+            'AT', 'BE', 'BG', 'CY',
+            'CZ', 'DK', 'DE', 'EE',
+            'ES', 'FI', 'FR', 'GB',
+            'GR', 'HU', 'IE', 'IT',
+            'LV', 'LT', 'LU', 'MT',
+            'NL', 'PT', 'PL', 'RO',
+            'SI', 'SK', 'SE', 'HR'
+        ),
+        'RU' => array(
+            'RU',
+        ),
+    );
+
+    static private $vat = array(
         // provider
-        'NL' => array(
+        'EU' => array(
             // customer
             'EU' => array(
                 // country
@@ -305,7 +320,7 @@ class Config
                     ),
                 ),
 
-                'EL' => array (
+                'GR' => array (
                     'name' => 'Greece',
                     'periods' => array (
                         '0000-01-01' => array (
@@ -320,12 +335,25 @@ class Config
         ),
 
         'RU' => array(
+            'RU' => array(
+                'RU' => array (
+                    'name' => 'Russia',
+                    'periods' => array (
+                        '0000-01-01' => array (
+                            'standard' => 18,
+                        ),
+                    ),
+                ),
 
+            ),
         ),
     );
 
     static public function get()
     {
-        return self::$data;
+        return array (
+            'jurisdiction' => self::$jurisdiction,
+            'vat' => self::$vat,
+        );
     }
 }
