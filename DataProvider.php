@@ -9,7 +9,8 @@ class DataProvider
     protected $customerJurisdiction = null;
     protected $customerVatNumber = null;
     protected $customerCountry = null;
-    protected $activeDate = '0000-01-01';
+    protected $activeDate = null;
+    protected $typeVat = 'standard';
 
 
     public function getProviderJurisdiction()
@@ -19,7 +20,7 @@ class DataProvider
 
     public function setProviderJurisdiction($value)
     {
-        $this->providerJurisdiction = $value;
+        $this->providerJurisdiction = strtoupper($value);
     }
 
     public function getProviderCountry()
@@ -29,7 +30,7 @@ class DataProvider
 
     public function setProviderCountry($value)
     {
-        $this->providerCountry = $value;
+        $this->providerCountry = strtoupper($value);
     }
 
     public function getCustomerJurisdiction()
@@ -39,7 +40,7 @@ class DataProvider
 
     public function setCustomerJurisdiction($value)
     {
-        $this->customerJurisdiction = $value;
+        $this->customerJurisdiction = strtoupper($value);
     }
 
     public function getCustomerVatNumber()
@@ -59,7 +60,7 @@ class DataProvider
 
     public function setCustomerCountry($value)
     {
-        $this->customerCountry = $value;
+        $this->customerCountry = strtoupper($value);
     }
 
     public function getActiveDate()
@@ -70,5 +71,15 @@ class DataProvider
     public function setActiveDate($value)
     {
         $this->activeDate = $value;
+    }
+
+    public function getTypeVat()
+    {
+        return $this->typeVat;
+    }
+
+    public function setTypeVat($value)
+    {
+        $this->typeVat = $value;
     }
 }
