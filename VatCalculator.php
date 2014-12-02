@@ -3,15 +3,92 @@
 namespace Openprovider\Vat;
 
 use Openprovider\Vat\Config;
-use Openprovider\Vat\DataProvider;
 
 class VatCalculator
 {
-    public function calculate(DataProvider $dataProvider, $typeVat = 'standard')
+    protected $providerJurisdiction = null;
+    protected $providerCountry = null;
+    protected $customerJurisdiction = null;
+    protected $customerVatNumber = null;
+    protected $customerCountry = null;
+    protected $activeDate = null;
+    protected $typeVat = 'standard';
+
+    public function getProviderJurisdiction()
+    {
+        return $this->providerJurisdiction;
+    }
+
+    public function setProviderJurisdiction($value)
+    {
+        $this->providerJurisdiction = strtoupper($value);
+    }
+
+    public function getProviderCountry()
+    {
+        return $this->providerCountry;
+    }
+
+    public function setProviderCountry($value)
+    {
+        $this->providerCountry = strtoupper($value);
+    }
+
+    public function getCustomerJurisdiction()
+    {
+        return $this->customerJurisdiction;
+    }
+
+    public function setCustomerJurisdiction($value)
+    {
+        $this->customerJurisdiction = strtoupper($value);
+    }
+
+    public function getCustomerVatNumber()
+    {
+        return $this->customerVatNumber;
+    }
+
+    public function setCustomerVatNumber($value)
+    {
+        $this->customerVatNumber = $value;
+    }
+
+    public function getCustomerCountry()
+    {
+        return $this->customerCountry;
+    }
+
+    public function setCustomerCountry($value)
+    {
+        $this->customerCountry = strtoupper($value);
+    }
+
+    public function getActiveDate()
+    {
+        return $this->activeDate;
+    }
+
+    public function setActiveDate($value)
+    {
+        $this->activeDate = $value;
+    }
+
+    public function getTypeVat()
+    {
+        return $this->typeVat;
+    }
+
+    public function setTypeVat($value)
+    {
+        $this->typeVat = $value;
+    }
+
+    public function calculate()
     {
         $data = Config::get();
         $vatData = $data['vat'];
-        $pj = $dataProvider->getProviderJurisdiction();
+        $pj = $this->getProviderJurisdiction();
         if (!array_key_exists($pj, $vatData)) {
             throw new \Exception(
                 "Incorrect value '{$pj}' for provider jurisdiction"
@@ -19,7 +96,7 @@ class VatCalculator
         }
 
         $provider = $vatData[$pj];
-        $cj = $dataProvider->getCustomerJurisdiction();
+        $cj = $this->getCustomerJurisdiction();
         if (!array_key_exists($cj, $provider)) {
             if ($pj == 'EU') {
                 return 0;
@@ -31,28 +108,28 @@ class VatCalculator
         }
 
         $vat = null;
-        $customer = $provider[$cj];
+        $customerVat = $provider[$cj];
         switch ($pj) {
             case 'EU':
-                if ($dataProvider->getCustomerVatNumber()) {
+                if ($this->getCustomerVatNumber()) {
                     // B2B deal
                     $jurisdData = $data['jurisdiction'];
-                    if (!in_array($dataProvider->getProviderCountry(), $jurisdData[$pj])) {
+                    if (!in_array($this->getProviderCountry(), $jurisdData[$pj])) {
                         throw new \Exception(
-                            "Incorrect country value '{$dataProvider->getProviderCountry()}' for provider jurisdiction"
+                            "Incorrect country value '{$this->getProviderCountry()}' for provider jurisdiction"
                         );
                     }
-                    if ($dataProvider->getCustomerCountry() == $dataProvider->getProviderCountry()) {
-                        $vat = $this->searchActiveVat($dataProvider, $customer);
+                    if ($this->getCustomerCountry() == $this->getProviderCountry()) {
+                        $vat = $this->searchActiveVat($customerVat);
                     } else {
                         $vat = 0;
                     }
                 } else {
-                    $vat = $this->searchActiveVat($dataProvider, $customer);
+                    $vat = $this->searchActiveVat($customerVat);
                 }
                 break;
             case 'RU':
-                $vat = $this->searchActiveVat($dataProvider, $customer);
+                $vat = $this->searchActiveVat($customerVat);
                 break;
             default :
                 throw new \Exception(
@@ -63,18 +140,18 @@ class VatCalculator
         return $vat;
     }
 
-    private function searchActiveVat(DataProvider $dataProvider, $customerVat)
+    private function searchActiveVat($customerVat)
     {
-        $activeDate = $dataProvider->getActiveDate();
+        $activeDate = $this->getActiveDate();
         if (!$activeDate) {
             $activeDate = date("Y-m-d");
         }
-        if (!array_key_exists($dataProvider->getCustomerCountry(), $customerVat)) {
+        if (!array_key_exists($this->getCustomerCountry(), $customerVat)) {
             throw new \Exception(
-                "Incorrect value '{$dataProvider->getCustomerCountry()}' for customer country"
+                "Incorrect value '{$this->getCustomerCountry()}' for customer country"
             );
         }
-        $periods = $customerVat[$dataProvider->getCustomerCountry()]['periods'];
+        $periods = $customerVat[$this->getCustomerCountry()]['periods'];
         $keys = array_keys($periods);
         sort($keys);
         $activePeriod = null;
@@ -89,10 +166,10 @@ class VatCalculator
         if (is_null($activePeriod)) {
             throw new \Exception("VAT is not found for the current period");
         }
-        if (empty($periods[$activePeriod][$dataProvider->getTypeVat()])) {
-            throw new \Exception("VAT '{$dataProvider->getTypeVat()}' is not defined");
+        if (empty($periods[$activePeriod][$this->getTypeVat()])) {
+            throw new \Exception("VAT '{$this->getTypeVat()}' is not defined");
         }
 
-        return $periods[$activePeriod][$dataProvider->getTypeVat()];
+        return $periods[$activePeriod][$this->getTypeVat()];
     }
 }
