@@ -24,13 +24,13 @@ class TestManager
         $cj = strtoupper($customerJurisdiction);
         $cc = strtoupper($customerCountry);
         if (!isset($this->data[$pj][$cj][$cc]['periods'])) {
-            throw new \Exception(__METHOD__.": Incorrect values('{$pj}', '{$cj}', '{$cc}')");
+            throw new \Exception("Incorrect values: '{$pj}', '{$cj}', '{$cc}'");
         }
 
         $periods = $this->data[$pj][$cj][$cc]['periods'];
         $activePeriod = $period ? $period : $this->searchActivePeriod($periods);
         if (!isset($periods[$activePeriod][$typeVat])) {
-            throw new \Exception(__METHOD__.": Incorrect values('{$activePeriod}', '{$typeVat}')");
+            throw new \Exception("Incorrect values: '{$activePeriod}', '{$typeVat}'");
         }
 
         return $periods[$activePeriod][$typeVat];
@@ -49,7 +49,7 @@ class TestManager
         $cj = strtoupper($customerJurisdiction);
         $cc = strtoupper($customerCountry);
         if (empty($pj) || empty($cj) || empty($cc)) {
-            throw new \Exception(__METHOD__.": Incorrect values('{$pj}', '{$cj}', '{$cc}')");
+            throw new \Exception("Incorrect values: '{$pj}', '{$cj}', '{$cc}'");
         }
         if (!isset($this->data[$pj][$cj][$cc]['periods'])) {
             $this->data[$pj][$cj][$cc]['periods'] = [];
