@@ -4,21 +4,6 @@ namespace Openprovider\Vat;
 
 class Config
 {
-    static private $jurisdiction = array(
-        'EU' => array(
-            'AT', 'BE', 'BG', 'CY',
-            'CZ', 'DK', 'DE', 'EE',
-            'ES', 'FI', 'FR', 'GB',
-            'GR', 'HU', 'IE', 'IT',
-            'LV', 'LT', 'LU', 'MT',
-            'NL', 'PT', 'PL', 'RO',
-            'SI', 'SK', 'SE', 'HR'
-        ),
-        'RU' => array(
-            'RU',
-        ),
-    );
-
     static private $vat = array(
         // provider
         'EU' => array(
@@ -351,9 +336,6 @@ class Config
 
     static public function get()
     {
-        return array (
-            'jurisdiction' => self::$jurisdiction,
-            'vat' => self::$vat,
-        );
+        return self::$vat;
     }
 }

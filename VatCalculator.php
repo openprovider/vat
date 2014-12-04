@@ -86,8 +86,7 @@ class VatCalculator
 
     public function calculate()
     {
-        $data = Config::get();
-        $vatData = $data['vat'];
+        $vatData = Config::get();
         $pj = $this->getProviderJurisdiction();
         if (!array_key_exists($pj, $vatData)) {
             throw new \Exception(
@@ -113,8 +112,8 @@ class VatCalculator
             case 'EU':
                 if ($this->getCustomerVatNumber()) {
                     // B2B deal
-                    $jurisdData = $data['jurisdiction'];
-                    if (!in_array($this->getProviderCountry(), $jurisdData[$pj])) {
+                    $jurisdData = array_keys($customerVat);
+                    if (!in_array($this->getProviderCountry(), $jurisdData)) {
                         throw new \Exception(
                             "Incorrect country value '{$this->getProviderCountry()}' for provider jurisdiction"
                         );
