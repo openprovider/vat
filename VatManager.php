@@ -2,33 +2,26 @@
 
 namespace Openprovider\Vat;
 
-use Openprovider\Vat\Config;
+use Openprovider\Vat;
 
-class TestManager
+class VatManager
 {
-    private $data = null;
-
-    public function __construct() {
-        $this->data = Config::get();
-    }
-
-    public function getVat(
-        $providerJurisdiction,
-        $customerJurisdiction,
-        $customerCountry,
-        $period = null,
-        $typeVat = 'standard'
+    public static function getVat(
+        $providerJurisdiction, $customerJurisdiction, $customerCountry,
+        $period = null, $typeVat = 'standard'
     )
     {
+        $data = Config::get();
+
         $pj = strtoupper($providerJurisdiction);
         $cj = strtoupper($customerJurisdiction);
         $cc = strtoupper($customerCountry);
-        if (!isset($this->data[$pj][$cj][$cc]['periods'])) {
+        if (!isset($data[$pj][$cj][$cc]['periods'])) {
             throw new \Exception("Incorrect values: '{$pj}', '{$cj}', '{$cc}'");
         }
 
-        $periods = $this->data[$pj][$cj][$cc]['periods'];
-        $activePeriod = $period ? $period : $this->searchActivePeriod($periods);
+        $periods = $data[$pj][$cj][$cc]['periods'];
+        $activePeriod = $period ? $period : self::searchActivePeriod($periods);
         if (!isset($periods[$activePeriod][$typeVat])) {
             throw new \Exception("Incorrect values: '{$activePeriod}', '{$typeVat}'");
         }
@@ -36,32 +29,32 @@ class TestManager
         return $periods[$activePeriod][$typeVat];
     }
 
-    public function setVat(
-        $value,
-        $providerJurisdiction,
-        $customerJurisdiction,
-        $customerCountry,
-        $period = null,
-        $typeVat = 'standard'
+    public static function setVat(
+        $value, $providerJurisdiction, $customerJurisdiction, $customerCountry,
+        $period = null, $typeVat = 'standard'
     )
     {
+        $data = Config::get();
+
         $pj = strtoupper($providerJurisdiction);
         $cj = strtoupper($customerJurisdiction);
         $cc = strtoupper($customerCountry);
         if (empty($pj) || empty($cj) || empty($cc)) {
             throw new \Exception("Incorrect values: '{$pj}', '{$cj}', '{$cc}'");
         }
-        if (!isset($this->data[$pj][$cj][$cc]['periods'])) {
-            $this->data[$pj][$cj][$cc]['periods'] = [];
+        if (!isset($data[$pj][$cj][$cc]['periods'])) {
+            $data[$pj][$cj][$cc]['periods'] = [];
+            Config::set($data);
         }
 
-        $periods = $this->data[$pj][$cj][$cc]['periods'];
-        $activePeriod = $period ? $period : $this->searchActivePeriod($periods);
+        $periods = $data[$pj][$cj][$cc]['periods'];
+        $activePeriod = $period ? $period : self::searchActivePeriod($periods);
 
-        $this->data[$pj][$cj][$cc]['periods'][$activePeriod][$typeVat] = $value;
+        $data[$pj][$cj][$cc]['periods'][$activePeriod][$typeVat] = $value;
+        Config::set($data);
     }
 
-    private function searchActivePeriod($periods)
+    private static function searchActivePeriod($periods)
     {
         $activeDate = date("Y-m-d");
 

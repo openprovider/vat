@@ -2,14 +2,13 @@
 
 namespace Openprovider\Vat\Tests;
 
-use Openprovider\Vat\TestManager;
 use Openprovider\Vat\VatCalculator;
+use Openprovider\Vat\VatManager;
 
 class VatCalculatorTestCase extends \PHPUnit_Framework_TestCase
 {
     public function testCalculator()
     {
-        $tm = new TestManager();
         $providerJurisdiction = 'EU';
         $customerJurisdiction = 'EU';
         $customerCountry = 'NL';
@@ -21,7 +20,9 @@ class VatCalculatorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $calc->calculate(),
-            $tm->getVat($providerJurisdiction, $customerJurisdiction, $customerCountry)
+            VatManager::getVat(
+                $providerJurisdiction, $customerJurisdiction, $customerCountry
+            )
         );
     }
 }

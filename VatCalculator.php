@@ -2,7 +2,7 @@
 
 namespace Openprovider\Vat;
 
-use Openprovider\Vat\Config;
+use Openprovider\Vat;
 
 class VatCalculator
 {

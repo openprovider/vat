@@ -338,4 +338,9 @@ class Config
     {
         return self::$vat;
     }
+
+    static public function set($v)
+    {
+        self::$vat = $v;
+    }
 }
