@@ -4,36 +4,10 @@ namespace Openprovider\Vat;
 
 class Calculator
 {
-    protected $euCountries = [
-        'ES',
-        'LU',
-        'LT',
-        'FI',
-        'CY',
-        'AT',
-        'CZ',
-        'IE',
-        'GB',
-        'SE',
-        'BE',
-        'IT',
-        'PL',
-        'LV',
-        'HU',
-        'RO',
-        'DE',
-        'DK',
-        'EE',
-        'HR',
-        'BG',
-        'MT',
-        'FR',
-        'SK',
-        'PT',
-        'NL',
-        'SI',
-        'EL',
-    ];
+    /**
+     * @var array
+     */
+    protected $euCountries = [];
 
     /**
      * @var array
@@ -48,10 +22,13 @@ class Calculator
     /**
      * @param array $rates see http://jsonvat.com/ for details
      * @param string $effectiveDate format 'Y-m-d'
+     * @param array $euCountries List of country codes
      */
-    function __construct(array $rates, $effectiveDate)
+    function __construct(array $rates, $effectiveDate, array $euCountries)
     {
         $this->effectiveDate = $effectiveDate;
+        $this->euCountries = $euCountries;
+
         $this->rates = [];
         foreach ($rates as $country) {
             $periods = $country['periods'];
