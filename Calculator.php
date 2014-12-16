@@ -26,6 +26,10 @@ class Calculator
      */
     function __construct(array $rates, $effectiveDate, array $euCountries)
     {
+        if (empty($rates)) {
+            throw new \InvalidArgumentException('Rates can not be empty.');
+        }
+
         $this->effectiveDate = $effectiveDate;
         $this->euCountries = $euCountries;
 
