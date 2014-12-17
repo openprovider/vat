@@ -1,0 +1,27 @@
+{
+    "name": "openprovider/vat",
+    "type": "library",
+    "description": "Openprovider Calculator Vat Percent",
+    "keywords": [],
+    "homepage": "http://openprovider.eu",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Openprovider",
+            "email": "developers@hosting-concepts.nl"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Openprovider\\Vat\\": ""
+        }
+    },
+    "target-dir": "Openprovider/Vat",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.2.*"
+    },
+    "minimum-stability": "dev"
+}
