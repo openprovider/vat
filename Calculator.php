@@ -85,12 +85,8 @@ class Calculator
      * @param bool $isB2b
      * @return mixed
      */
-    public function calculate($providerCountry, $customerCountry, $isB2b)
+    public function calculate()
     {
-        $this->setProviderCountry($providerCountry);
-        $this->setCustomerCountry($customerCountry);
-        $this->setIsB2b($isB2b);
-
         if ($this->isEuCountry($this->getProviderCountry())) {
             return $this->calculateEuVat();
         }
