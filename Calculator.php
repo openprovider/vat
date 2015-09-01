@@ -46,16 +46,14 @@ class Calculator
      * @param string $effectiveDate format 'Y-m-d'
      * @param array $euCountries List of country codes
      */
-    function __construct(array $rates, $effectiveDate, array $euCountries)
+    function __construct($effectiveDate, array $euCountries)
     {
-        if (empty($rates)) {
-            $file = __DIR__ . '/data/vat.json';
-            if (file_exists($file)) {
-                $data = json_decode(file_get_contents($file), true);
-                $rates = $data['rates'];
-            } else {
-                throw new \InvalidArgumentException('Rates can not be empty.');
-            }
+        $file = __DIR__ . '/data/vat.json';
+        if (file_exists($file)) {
+            $data = json_decode(file_get_contents($file), true);
+            $rates = $data['rates'];
+        } else {
+            throw new \InvalidArgumentException('Rates can not be empty.');
         }
 
         $file = __DIR__ . '/data/vatExemption.json';

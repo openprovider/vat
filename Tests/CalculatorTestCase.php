@@ -14,8 +14,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $vat = json_decode(file_get_contents(__DIR__ . '/../data/vat.json'), true);
-        $this->calc = new Calculator($vat['rates'], '2014-12-12', ['NL', 'LU', 'DE']);
+        $this->calc = new Calculator('2014-12-12', ['NL', 'LU', 'DE']);
     }
 
     public function testNlNlB2c()
