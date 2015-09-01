@@ -14,8 +14,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $vat = json_decode(file_get_contents(__DIR__ . '/fixtures/vat.json'), true);
-        $this->calc = new Calculator($vat['rates'], '2014-12-12', ['NL', 'LU']);
+        $vat = json_decode(file_get_contents(__DIR__ . '/../data/vat.json'), true);
+        $this->calc = new Calculator($vat['rates'], '2014-12-12', ['NL', 'LU', 'DE']);
     }
 
     public function testNlNlB2c()
@@ -45,7 +45,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     public function testRuRu()
     {
         $vat = $this->calc->calculate('ru', 'ru', true);
-        $this->assertEquals(13, $vat);
+        $this->assertEquals(18, $vat);
+    }
+
+    public function testGrGr()
+    {
+        $vat = $this->calc->calculate('nl', 'gr', true);
+        $this->assertEquals(0, $vat);
     }
 
     /**
@@ -67,6 +73,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     public function testNotEuCustomer()
     {
         $vat = $this->calc->calculate('nl', 'us', false);
+        $this->assertEquals(0, $vat);
+    }
+
+    public function testVatExemption()
+    {
+        $this->calc->setProvince('Büsingen');
+        $vat = $this->calc->calculate('nl', 'de', false);
         $this->assertEquals(0, $vat);
     }
 }

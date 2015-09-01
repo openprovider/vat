@@ -20,6 +20,28 @@ class Calculator
     protected $effectiveDate;
 
     /**
+     * @var string
+     */
+    protected $providerCountry;
+
+    /**
+     * @var bool
+     */
+    protected $isB2b;
+
+    /**
+     * @var string - country code
+     */
+    protected $customerCountry;
+
+    /**
+     * @var string
+     */
+    protected $province;
+
+    private $vatExemption;
+
+    /**
      * @param array $rates see http://jsonvat.com/ for details
      * @param string $effectiveDate format 'Y-m-d'
      * @param array $euCountries List of country codes
@@ -27,8 +49,18 @@ class Calculator
     function __construct(array $rates, $effectiveDate, array $euCountries)
     {
         if (empty($rates)) {
-            throw new \InvalidArgumentException('Rates can not be empty.');
+            $file = __DIR__ . '/data/vat.json';
+            if (file_exists($file)) {
+                $data = json_decode(file_get_contents($file), true);
+                $rates = $data['rates'];
+            } else {
+                throw new \InvalidArgumentException('Rates can not be empty.');
+            }
         }
+
+        $file = __DIR__ . '/data/vatExemption.json';
+        $data = json_decode(file_get_contents($file), true);
+        $this->vatExemption = $data['list'];
 
         $this->effectiveDate = $effectiveDate;
         $this->euCountries = $euCountries;
@@ -57,40 +89,45 @@ class Calculator
      */
     public function calculate($providerCountry, $customerCountry, $isB2b)
     {
-        $providerCountry = strtoupper($providerCountry);
-        $customerCountry = strtoupper($customerCountry);
+        $this->setProviderCountry($providerCountry);
+        $this->setCustomerCountry($customerCountry);
+        $this->setIsB2b($isB2b);
 
-        if ($this->isEuCountry($providerCountry)) {
-            return $this->calculateEuVat($providerCountry, $customerCountry, $isB2b);
+        if ($this->isEuCountry($this->getProviderCountry())) {
+            return $this->calculateEuVat();
         }
 
-        if ($providerCountry == 'RU') {
-            return $this->calculateRuVat($providerCountry, $customerCountry);
+        if ($this->getProviderCountry() == 'RU') {
+            return $this->calculateRuVat();
         }
 
-        throw new \RuntimeException("Country '$providerCountry' not allowed for provider.");
+        throw new \RuntimeException("Country '{$this->getProviderCountry()}' not allowed for provider.");
     }
 
-    protected function calculateEuVat($providerCountry, $customerCountry, $isB2b)
+    protected function calculateEuVat()
     {
-        if (!$this->isEuCountry($customerCountry)) {
+        if ($this->checkProvincesEu()) {
             return 0;
         }
 
-        if ($isB2b && $providerCountry != $customerCountry) {
+        if (!$this->isEuCountry($this->getCustomerCountry())) {
             return 0;
         }
 
-        return $this->searchEffectiveVat($customerCountry, $this->effectiveDate);
-    }
-
-    protected function calculateRuVat($providerCountry, $customerCountry)
-    {
-        if ($customerCountry != 'RU') {
-            throw new \RuntimeException("Country '$customerCountry' not allowed for customer.");
+        if ($this->getIsB2b() && $this->getProviderCountry() != $this->getCustomerCountry()) {
+            return 0;
         }
 
-        return $this->searchEffectiveVat($providerCountry, $this->effectiveDate);
+        return $this->searchEffectiveVat($this->getCustomerCountry(), $this->getEffectiveDate());
+    }
+
+    protected function calculateRuVat()
+    {
+        if ($this->getCustomerCountry() != 'RU') {
+            throw new \RuntimeException("Country '{$this->getCustomerCountry()}' not allowed for customer.");
+        }
+
+        return $this->searchEffectiveVat($this->getProviderCountry(), $this->getEffectiveDate());
     }
 
     protected function isEuCountry($countryCode)
@@ -113,10 +150,10 @@ class Calculator
                 }
             }
 
-            throw new \RuntimeException("Not found period for '$countryCode' country.");
+            throw new \RuntimeException("Not found period for '{$countryCode}' country.");
         }
 
-        throw new \RuntimeException("VAT rate not found for '$countryCode' country.");
+        throw new \RuntimeException("VAT rate not found for '{$countryCode}' country.");
     }
 
     /**
@@ -133,5 +170,76 @@ class Calculator
     public function setEffectiveDate($effectiveDate)
     {
         $this->effectiveDate = $effectiveDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsB2b()
+    {
+        return $this->isB2b;
+    }
+
+    /**
+     * @param bool $isB2b
+     */
+    public function setIsB2b($isB2b)
+    {
+        $this->isB2b = $isB2b;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProviderCountry()
+    {
+        return $this->providerCountry;
+    }
+
+    /**
+     * @param string $providerCountry
+     */
+    public function setProviderCountry($providerCountry)
+    {
+        $this->providerCountry = strtoupper($providerCountry);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerCountry()
+    {
+        return $this->customerCountry;
+    }
+
+    /**
+     * @param string $customerCountry
+     */
+    public function setCustomerCountry($customerCountry)
+    {
+        $this->customerCountry = strtoupper($customerCountry);
+    }
+
+    /**
+     * @return string
+     */
+    public function getProvince()
+    {
+        return $this->province;
+    }
+
+    /**
+     * @param string $province
+     */
+    public function setProvince($province)
+    {
+        $this->province = strtoupper($province);
+    }
+
+    private function checkProvincesEu()
+    {
+        return $this->getProvince()
+            && array_key_exists($this->getCustomerCountry(), $this->vatExemption)
+            && in_array($this->getProvince(), $this->vatExemption[$this->getCustomerCountry()]['provinces']);
     }
 }

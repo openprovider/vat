@@ -7,7 +7,7 @@
             "periods": [
                 {
                     "effective_from": "0000-01-01",
-                    "rates": {"standard": 13.0}
+                    "rates": {"standard": 18.0}
                 }
             ]
         },
@@ -221,7 +221,7 @@
         },
         {
             "name": "Greece",
-            "code": "EL",
+            "code": "GR",
             "periods": [
                 {
                     "effective_from": "0000-01-01",

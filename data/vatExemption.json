@@ -1,0 +1,63 @@
+{
+    "details": "EU countries in EU VAT area and included VAT exemption territories",
+    "list": {
+        "DK": {
+            "code": "DK",
+            "provinces": [
+                "FAROE ISLANDS",
+                "GREENLAND"
+            ]
+        },
+        "FI": {
+            "code": "FI",
+            "provinces": [
+                "ÅLAND ISLANDS"
+            ]
+        },
+        "FR": {
+            "code": "FR",
+            "provinces": [
+                "GUADELOUPE",
+                "MARTINIQUE",
+                "RéUNION",
+                "ST. PIERRE AND MIQUELON",
+                "FRENCH GUIANA"
+            ]
+        },
+        "DE": {
+            "code": "DE",
+            "provinces": [
+                "BüSINGEN",
+                "ISLE OF HELIGOLAND"
+            ]
+        },
+        "GR": {
+            "code": "GR",
+            "provinces": [
+                "MOUNT ATHOS"
+            ]
+        },
+        "IT": {
+            "code": "IT",
+            "provinces": [
+                "COMMUNES OF LIVIGNO AND CAMPIONE D’ITALIA",
+                "ITALIAN WATERS OF LAKE LUGANO"
+            ]
+        },
+        "ES": {
+            "code": "ES",
+            "provinces": [
+                "CEUTA",
+                "MELILLA",
+                "SANTA CRUZ DE TENERIFE",
+                "LAS PALMAS"
+            ]
+        },
+        "GB": {
+            "code": "GB",
+            "provinces": [
+                "CHANNEL ISLANDS"
+            ]
+        }
+    }
+}
