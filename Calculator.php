@@ -100,7 +100,7 @@ class Calculator
 
     protected function calculateEuVat()
     {
-        if ($this->checkProvincesEu()) {
+        if ($this->isEuExemption()) {
             return 0;
         }
 
@@ -230,7 +230,7 @@ class Calculator
         $this->province = strtoupper($province);
     }
 
-    private function checkProvincesEu()
+    public function isEuExemption()
     {
         return $this->getProvince()
             && array_key_exists($this->getCustomerCountry(), $this->vatExemption)
