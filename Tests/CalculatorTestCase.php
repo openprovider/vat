@@ -19,37 +19,55 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     public function testNlNlB2c()
     {
-        $vat = $this->calc->calculate('nl', 'nl', false);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('nl');
+        $this->calc->setIsB2b(false);
+        $vat = $this->calc->calculate();
         $this->assertEquals(21, $vat);
     }
 
     public function testNlNlB2b()
     {
-        $vat = $this->calc->calculate('nl', 'nl', true);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('nl');
+        $this->calc->setIsB2b(TRUE);
+        $vat = $this->calc->calculate();
         $this->assertEquals(21, $vat);
     }
 
     public function testNlLuB2c()
     {
-        $vat = $this->calc->calculate('nl', 'lu', false);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('lu');
+        $this->calc->setIsB2b(false);
+        $vat = $this->calc->calculate();
         $this->assertEquals(15, $vat);
     }
 
     public function testNlLuB2b()
     {
-        $vat = $this->calc->calculate('nl', 'lu', true);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('lu');
+        $this->calc->setIsB2b(true);
+        $vat = $this->calc->calculate();
         $this->assertEquals(0, $vat);
     }
 
     public function testRuRu()
     {
-        $vat = $this->calc->calculate('ru', 'ru', true);
+        $this->calc->setProviderCountry('ru');
+        $this->calc->setCustomerCountry('ru');
+        $this->calc->setIsB2b(true);
+        $vat = $this->calc->calculate();
         $this->assertEquals(18, $vat);
     }
 
     public function testGrGr()
     {
-        $vat = $this->calc->calculate('nl', 'gr', true);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('gr');
+        $this->calc->setIsB2b(true);
+        $vat = $this->calc->calculate();
         $this->assertEquals(0, $vat);
     }
 
@@ -58,7 +76,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnlyRuCustomerForRuProvider()
     {
-        $this->calc->calculate('ru', 'lu', true);
+        $this->calc->setProviderCountry('ru');
+        $this->calc->setCustomerCountry('lu');
+        $this->calc->setIsB2b(true);
+        $this->calc->calculate();
     }
 
     /**
@@ -66,19 +87,28 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotSupportedCountryForProvider()
     {
-        $this->calc->calculate('us', 'nl', false);
+        $this->calc->setProviderCountry('us');
+        $this->calc->setCustomerCountry('nl');
+        $this->calc->setIsB2b(false);
+        $this->calc->calculate();
     }
 
     public function testNotEuCustomer()
     {
-        $vat = $this->calc->calculate('nl', 'us', false);
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('us');
+        $this->calc->setIsB2b(false);
+        $vat = $this->calc->calculate();
         $this->assertEquals(0, $vat);
     }
 
     public function testVatExemption()
     {
+        $this->calc->setProviderCountry('nl');
+        $this->calc->setCustomerCountry('de');
+        $this->calc->setIsB2b(false);
         $this->calc->setProvince('Büsingen');
-        $vat = $this->calc->calculate('nl', 'de', false);
+        $vat = $this->calc->calculate();
         $this->assertEquals(0, $vat);
     }
 }
