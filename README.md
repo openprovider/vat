@@ -29,10 +29,10 @@ $vat = $calc->calculate();
 #### 1.0.2
 - Update unit-tests
 
-## Authors
+### Authors
 
-[Yuriy Vasilev](https://github.com/yuriy-vasilev)
-[Evgeniy Karagodin](https://github.com/ekaragodin)
+* [Yuriy Vasilev](https://github.com/yuriy-vasilev)
+* [Evgeniy Karagodin](https://github.com/ekaragodin)
 
 ### Contributors
 
