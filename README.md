@@ -20,13 +20,21 @@ $vat = $calc->calculate();
 
 ### Changelog
 
+#### 1.0.4
+- Release to open source
+
 #### 1.0.3
 - Rename method checkProvincesEu -> isEuExemption
 
 #### 1.0.2
 - Update unit-tests
 
-## Contributors
+## Authors
+
+[Yuriy Vasilev](https://github.com/yuriy-vasilev)
+[Evgeniy Karagodin](https://github.com/ekaragodin)
+
+### Contributors
 
 All the contributors are welcome. If you would like to be the contributor please accept some rules.
 - The pull requests will be accepted only in "develop" branch
@@ -34,6 +42,6 @@ All the contributors are welcome. If you would like to be the contributor please
 
 Thank you for your understanding!
 
-## License
+### License
 
 [MIT Public License](https://github.com/openprovider/vat/blob/master/LICENSE)
