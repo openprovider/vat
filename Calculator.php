@@ -47,13 +47,12 @@ class Calculator
     private $vatExemption;
 
     /**
-     * @param array $rates see http://jsonvat.com/ for details
      * @param string $effectiveDate format 'Y-m-d'
      * @param array $euCountries List of country codes
      */
     function __construct($effectiveDate, array $euCountries)
     {
-        $file = __DIR__ . '/data/vat.json';
+        $file = __DIR__ . '/data/vat.json'; // See http://jsonvat.com/ for details
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file), true);
             $rates = $data['rates'];
@@ -85,10 +84,7 @@ class Calculator
     }
 
     /**
-     * @param string $providerCountry
-     * @param string $customerCountry
-     * @param bool $isB2b
-     * @return mixed
+     * @return float
      */
     public function calculate()
     {
