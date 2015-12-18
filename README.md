@@ -1,4 +1,4 @@
-Openprovider Calculator Vat Percent
+Openprovider VAT Percentage Calculator
 ====================
 
 
