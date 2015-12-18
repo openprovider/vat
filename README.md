@@ -1,6 +1,7 @@
 Openprovider VAT Percentage Calculator
 ====================
 
+From 01-01-2015 rules on VAT calculation in EU has changed and this package helps us to meet the legislation requirements regarding VAT percentage calculation throughout and outside EU including VAT exemption regions (e.g. like Canarian Islands).
 
 ### Installation
 
